@@ -1,0 +1,182 @@
+/* Style for the login container */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full height of the screen */
+  }
+  
+  /* Style for the form */
+  .login-form {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 60vw; /* Set the form width to 60% of the viewport width */
+    height: 60vw; /* Set the form height to 60% of the viewport width to make it square */
+    max-width: 600px; /* Limit the max width to 600px */
+    max-height: 600px; /* Limit the max height to 600px */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  /* Style for input fields */
+  .input-container {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 10px;
+    padding-left: 30px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .input-icon {
+    position: absolute;
+    left: 10px;
+    fill: #888;
+  }
+  
+  .error-message {
+    color: #f44336;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+  
+  /* Style for the submit button */
+  .login-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: 2px solid #4CAF50; /* Border to match button color */
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 0 6px 15px rgba(0, 0, 0, 0.2);
+    margin-top: 30px;
+  }
+  
+  /* Button hover effect */
+  .login-button:hover:not(:disabled) {
+    background: linear-gradient(135deg, #4CAF50, #76d76d);
+    background-size: 200% 200%;
+    border-color: #45a049;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05); /* Slightly enlarge the button */
+    animation: glowButton 1.5s ease-in-out infinite;
+  }
+  
+  /* Disabled button state */
+  .login-button:disabled {
+    background-color: #ccc;
+    border-color: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  
+  /* Glowing animation for the button */
+  @keyframes glowButton {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: 0 200%;
+    }
+  }
+  
+  /* Button active state */
+  .login-button:active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2), 0 6px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Advanced Styling for Login Heading */
+  .login-heading {
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+    color: #4CAF50; /* Green text to match the login button */
+    background: linear-gradient(135deg, #4CAF50, #76d76d); /* Green gradient */
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px;
+    position: relative;
+    box-sizing: border-box;
+    display: inline-block;
+    z-index: 1;
+    transition: all 0.3s ease;
+    margin-bottom: 50px;
+  }
+  
+  /* Add a subtle glowing effect around the heading */
+  .login-heading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: -1;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2), 0 6px 15px rgba(0, 0, 0, 0.3);
+    filter: blur(10px);
+    opacity: 0.3;
+  }
+  
+  /* Hover effect: Glow and animation */
+  .login-heading:hover {
+    color: #e57373; /* Red color for hover effect (matching the login button red) */
+    animation: headingHoverAnimation 1.2s ease-in-out infinite alternate;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.6);
+  }
+  
+  /* Keyframe animation for hover effect */
+  @keyframes headingHoverAnimation {
+    0% {
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 255, 255, 0.8);
+    }
+    100% {
+      text-shadow: 0 0 25px rgba(255, 255, 255, 1), 0 0 30px rgba(255, 255, 255, 1);
+    }
+  }
+  
+  /* Optional: Subtle typing animation */
+  .login-heading span {
+    display: inline-block;
+    overflow: hidden;
+    width: 0;
+    white-space: nowrap;
+    animation: typing 4s steps(20) 1s forwards, blink 0.75s step-end infinite;
+  }
+  
+  @keyframes typing {
+    0% {
+      width: 0;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+  
+  @keyframes blink {
+    50% {
+      border-color: transparent;
+    }
+  }
+  
