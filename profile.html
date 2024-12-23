@@ -4,427 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
-    <link rel="stylesheet" href="style.css"> <!-- Add your styles here -->
+    <link rel="stylesheet" href="styling/style.css"> <!-- Add your styles here -->
+    <link rel="stylesheet" href="styling/profile.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <style>
-        /* General styles */
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        #userProfile {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            width: 600px;
-            text-align: center; /* Center text in profile */
-        }
-
-        h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #388E3C; /* Main color */
-        }
-
-        p {
-            font-size: 16px;
-            margin: 8px 0;
-        }
-
-        /* Audit ratio styles */
-#auditRatioContainer {
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    margin: 20px auto; /* Space around and center in the parent */
-    width: 120px; /* Fixed size */
-    height: 120px; /* Fixed size */
-}
-        .ratio-label {
-  font-size: 18px;
-  font-weight: 600;
-  color: #333;
-}
-
-        /* XP Progression styles */
-        #xpProgressionContainer {
-            margin-top: 20px;
-        }
-
-        #pieChartTitle {
-    font-size: 22px;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    color: #388E3C;
-}
-
-#legend {
-    font-size: 16px;
-    color: #333;
-}
-
-#legend div {
-    margin: 5px 0;
-}
-
-        /* Logout button styles */
-        .logout-button {
-            padding: 12px 30px; /* More horizontal padding */
-            background-color: #4CAF50; /* Green color */
-            color: white;
-            border: none;
-            border-radius: 25px; /* Slightly less round corners */
-            font-size: 18px; /* Larger text size */
-            font-weight: 600; /* Bold text */
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            margin: 20px 0; /* Spacing above and below */
-        }
-
-        /* Hover effect */
-        .logout-button:hover {
-            background-color: red; /* Darker green on hover */
-            transform: translateY(-2px);
-            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Active state */
-        .logout-button:active {
-            transform: translateY(1px);
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Responsive styles */
-        @media (max-width: 600px) {
-            #userProfile {
-                width: 90%;
-                padding: 15px;
-            }
-
-            h2 {
-                font-size: 20px;
-            }
-
-            p {
-                font-size: 14px;
-            }
-
-            .logout-button {
-                font-size: 16px; /* Adjust button text size for mobile */
-                padding: 10px 20px; /* Adjust padding for mobile */
-            }
-        }
-        .ratio-details {
-    display: flex;
-    justify-content: space-around; /* Space them evenly */
-    align-items: center; /* Center items vertically */
-    margin-top: 20px; /* Space above */
-    font-size: 18px;
-    flex-direction: column; /* Stack items vertically */
-}
-
-.ratio-item {
-    display: flex;
-    align-items: center; /* Align icon and text */
-    margin: 10px 0; /* Space between items */
-}
-
-.ratio-text {
-    margin-left: 10px; /* Space between icon and text */
-}
-
-.label {
-    font-weight: bold;
-    color: #555; /* Softer label color */
-}
-
-.value {
-    font-size: 22px; /* Larger font size for values */
-    color: #333; /* Dark color for the value */
-    font-weight: bold; /* Bold for emphasis */
-}
-#tooltip {
-    pointer-events: none; /* Prevent tooltip from interfering with mouse events */
-    position: absolute;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 5px;
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-    </style>
+    <script src="src/profile.js"></script>
+    
 </head>
 <body>
     <div id="userProfile">
         <h2 id="fullName"></h2>
-        <p id="email"></p>
-        <p id="campus"></p>
+        <div class="email-campus-container">
+            <p class="email-campus" id="email"></p>
+            <p class="email-campus" id="campus"></p>
+        </div>
         <p id="level"></p>
         <p id="xp"></p>
-        <span className="ratio-label">Audits Ratio</span>
-        <div id="auditRatioContainer"></div>
-<div class="ratio-details">
-    <div class="ratio-item">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2v20M5 12l7-7 7 7" />
-        </svg>
-        <div class="ratio-text">
-            <span class="label">Done Audits:</span>
-            <span class="value" id="totalUpValue"></span>
-        </div>
-    </div>
-    <div class="ratio-item">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF5722" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2v20M19 12l-7 7-7-7" />
-        </svg>
-        <div class="ratio-text">
-            <span class="label">Received Audits:</span>
-            <span class="value" id="totalDownValue"></span>
-        </div>
-    </div>
-</div>
-<div id="audit-chart"></div>
-
-<div id="xpProgressionContainer"></div>
-<h3 id="pieChartTitle">Total Audits Distribution</h3>
-<div id="pieChartContainer" style="display: flex; align-items: flex-start;">
-    <div id="audit-chart"></div>
-    <div id="legend" style="margin-left: 20px;">
+        <h3 class="ratio-label">Audits Ratio</h3>
         <div style="display: flex; align-items: center;">
-            <div style="width: 20px; height: 20px; background-color: #4CAF50; margin-right: 5px;"></div>
-            <span>Pass</span>
+            <div id="auditRatioContainer"></div>
+            <div class="ratio-details" style="margin-left: 20px; font-size: 14px;">
+                <div class="ratio-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v20M5 12l7-7 7 7" />
+                    </svg>
+                    <div class="ratio-text">
+                        <span class="label">Done Audits:</span>
+                        <span class="value" id="totalUpValue"></span>
+                    </div>
+                </div>
+                <div class="ratio-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF5722" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v20M19 12l-7 7-7-7" />
+                    </svg>
+                    <div class="ratio-text">
+                        <span class="label">Received Audits:</span>
+                        <span class="value" id="totalDownValue"></span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div style="display: flex; align-items: center;">
-            <div style="width: 20px; height: 20px; background-color: red; margin-right: 5px;"></div>
-            <span>Fail</span>
+    
+        <div id="audit-chart"></div>
+        <div id="xpProgressionContainer"></div>
+        <h3 id="pieChartTitle">Total Audits Distribution</h3>
+        <div id="pieChartContainer" style="display: flex; align-items: flex-start;">
+            <div id="audit-chart"></div>
+            <div id="legend" style="margin-left: 20px;">
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 20px; height: 20px; background-color: #4CAF50; margin-right: 5px;"></div>
+                    <span>Pass</span>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 20px; height: 20px; background-color: red; margin-right: 5px;"></div>
+                    <span>Fail</span>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-
-        <button class="logout-button" onclick="Logout()">Logout</button>  <!-- Logout Button -->
-    </div>
-
     
-    <script>
-        const GRAPHQL_API = "https://learn.reboot01.com/api/graphql-engine/v1/graphql";
-
-        async function fetchUserDetails() {
-            const query = `query {
-                user {
-                    id
-                    login
-                    email
-                    campus
-                    profile
-                    lastName
-                    firstName
-                    auditRatio
-                    totalUp
-                    totalDown
-                    timeline: transactions(
-                        where: {type: {_eq: "xp"}, _or: [{attrs: {_eq: {}}}, {attrs: {_has_key: "group"}}], _and: [{path: {_nlike: "%/piscine-js/%"}}, {path: {_nlike: "%/piscine-go/%"}}]}
-                    ) {
-                        amount
-                        createdAt
-                        path
-                    }
-                }
-            }`;
-
-            const response = await fetch(GRAPHQL_API, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ query })
-            });
-            const data = await response.json();
-            return data.data.user[0];
-        }
-
-        async function renderUserProfile() {
-    const user = await fetchUserDetails();
-
-    document.getElementById("fullName").innerText = `Welcome ${user.firstName} ${user.lastName}`;
-    document.getElementById("email").innerText = `Email: ${user.email}`;
-    document.getElementById("campus").innerText = `Campus: ${user.campus}`;
-
-    // Update the ratio values
-    document.getElementById("totalUpValue").innerText = user.totalUp; // Set Done Audits value
-    document.getElementById("totalDownValue").innerText = user.totalDown; // Set Received Audits value
-
-    renderAuditRatioGraph(user.totalUp, user.totalDown);
-    fetchAuditsGiven(user.id); // Fetch audits for pie chart
-}
-
-        function renderAuditRatioGraph(totalUp, totalDown) {
-            const total = totalUp + totalDown;
-            const upPercentage = (totalUp / total) * 100;
-            const downPercentage = (totalDown / total) * 100;
-
-            const svg = d3.select("#auditRatioContainer").append("svg")
-                .attr("width", 120)
-                .attr("height", 120);
-
-            const radius = 50;
-
-            svg.append("circle")
-                .attr("cx", 60)
-                .attr("cy", 60)
-                .attr("r", radius)
-                .attr("stroke", "red")
-                .attr("stroke-width", 10)
-                .attr("fill", "none");
-
-            svg.append("circle")
-                .attr("cx", 60)
-                .attr("cy", 60)
-                .attr("r", radius)
-                .attr("stroke", "red")
-                .attr("stroke-width", 10)
-                .attr("fill", "none")
-                .attr("stroke-dasharray", `${(2 * Math.PI * radius * downPercentage) / 100} ${2 * Math.PI * radius}`)
-                .attr("transform", "rotate(-90 60 60)");
-
-            svg.append("circle")
-                .attr("cx", 60)
-                .attr("cy", 60)
-                .attr("r", radius)
-                .attr("stroke", "#4CAF50")
-                .attr("stroke-width", 10)
-                .attr("fill", "none")
-                .attr("stroke-dasharray", `${(2 * Math.PI * radius * upPercentage) / 100} ${2 * Math.PI * radius}`)
-                .attr("transform", "rotate(-90 60 60)");
-
-            svg.append("text")
-                .attr("x", "50%")
-                .attr("y", "50%")
-                .attr("text-anchor", "middle")
-                .attr("dy", ".35em")
-                .attr("font-size", "18")
-                .attr("fill", "#4CAF50")
-                .text((totalUp / totalDown).toFixed(2));
-        }
-
-        async function fetchAuditsGiven(userid) {
-            const query = `
-                query FetchAudits($userid: Int!) {
-                    audit(where: {auditorId: {_eq: $userid}, grade: {_is_null: false}}) {
-                        auditorId
-                        grade
-                    }
-                }
-            `;
-
-            const variables = { userid: parseInt(userid, 10) };
-            const data = await makeGraphQLRequest(query, variables);
-            displayPieChart(data.data.audit);
-        }
-
-        async function makeGraphQLRequest(query, variables = {}) {
-            const response = await fetch(GRAPHQL_API, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ query, variables })
-            });
-
-            const responseText = await response.text();
-            if (!response.ok) {
-                throw new Error(`GraphQL error: ${responseText}`);
-            }
-
-            return JSON.parse(responseText);
-        }
-
-        async function displayPieChart(audits) {
-    const svgContainer = d3.select("#audit-chart").append("svg")
-        .attr("width", 200)
-        .attr("height", 200);
-
-    const radius = Math.min(200, 200) / 2;
-    const centerX = 200 / 2;
-    const centerY = 200 / 2;
-
-    const passCount = audits.filter(audit => audit.grade >= 1).length;
-    const failCount = audits.filter(audit => audit.grade < 1).length;
-    const total = passCount + failCount;
-
-    const arc = d3.arc().innerRadius(0).outerRadius(radius);
-    const pieData = [
-        { value: passCount, color: '#4CAF50', label: `${passCount} Pass` },
-        { value: failCount, color: 'red', label: `${failCount} Fail` }
-    ];
-
-    const pie = d3.pie().value(d => d.value);
-
-    const arcs = svgContainer.selectAll('g.arc')
-        .data(pie(pieData))
-        .enter()
-        .append('g')
-        .attr('class', 'arc')
-        .attr('transform', `translate(${centerX}, ${centerY})`);
-
-    arcs.append('path')
-        .attr('d', arc)
-        .attr('fill', d => d.data.color)
-        .on("mouseover", function(event, d) {
-            const tooltip = d3.select("#tooltip");
-            tooltip.style("opacity", 1)
-                   .html(d.data.label)
-                   .style("left", (event.pageX + 5) + "px")
-                   .style("top", (event.pageY - 28) + "px");
-        })
-        .on("mouseout", function() {
-            d3.select("#tooltip").style("opacity", 0);
-        });
-
-    // Tooltip container
-    d3.select("body").append("div")
-        .attr("id", "tooltip")
-        .style("position", "absolute")
-        .style("background", "white")
-        .style("border", "1px solid #ccc")
-        .style("border-radius", "5px")
-        .style("padding", "5px")
-        .style("opacity", 0);
-    
-    // Center text
-    svgContainer.append("text")
-        .attr("x", centerX)
-        .attr("y", centerY)
-        .attr("text-anchor", "middle")
-        .attr("class", "text-label")
-       // .text(`${passCount} Pass / ${failCount} Fail`);
-}
-        
-        
-        
-        function Logout() {
-            console.log("Logout function called"); // Debugging log
-            const token = localStorage.getItem("token");
-            if (token) {
-                localStorage.removeItem("token");
-                console.log("Token removed, redirecting..."); // Debugging log
-            } else {
-                console.log("No token found"); // Debugging log
-            }
-            window.location.href = "login.html";
-        }
-
-        renderUserProfile();
-    </script>
+        <div style="display: flex; justify-content: flex-end;">
+            <button class="logout-button" onclick="Logout()">Logout</button>
+        </div>
+    </div> 
 </body>
 </html>
