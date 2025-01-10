@@ -166,20 +166,58 @@
     flex-direction: column; /* Stack items vertically */
     align-items: center; /* Center items */
     margin: 20px 0; /* Add spacing */
-    padding: 15px; /* Padding for better spacing */
+    padding: 20px; /* Increased padding for better spacing */
     background-color: #e8f5e9; /* Light green background */
-    border-radius: 10px; /* Rounded corners */
+    border-radius: 15px; /* More rounded corners */
     border: 1px solid #c8e6c9; /* Subtle border */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    transition: transform 0.2s; /* Animation for hover effect */
+}
+
+.email-campus-container:hover {
+    transform: scale(1.02); /* Slightly enlarge on hover */
 }
 
 .email-campus {
-    font-size: 18px; /* Slightly larger font size */
-    margin: 5px 0; /* Consistent margin */
-    color: #333; /* Dark color for text */
+    font-size: 20px; /* Larger font size for better readability */
+    margin: 8px 0; /* Consistent margin */
+    color: #388E3C ; /* Dark color for text */
+    text-align: center; /* Center text */
+}
+
+.email-campus span {
+    font-weight: bold; /* Bold user ID for emphasis */
 }
 
 .email-campus:hover {
     background-color: #c8e6c9; /* Darken background on hover */
     transition: background-color 0.3s; /* Smooth background transition */
+}
+
+/* XP Section Styles */
+#xp-section {
+    margin-top: 20px; /* Space above the XP section */
+    padding: 15px; /* Padding around the XP section */
+    background-color: #e8f5e9; /* Light green background for contrast */
+    border-radius: 8px; /* Slightly rounded corners */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    text-align: center; /* Center text */
+}
+
+#xp-section h3 {
+    font-size: 24px; /* Larger font size for the heading */
+    color: #388E3C; /* Main color for the text */
+    margin: 0; /* Remove default margin */
+}
+
+#xp-value, #level-value {
+    font-size: 28px; /* Larger font size for the XP and Level values */
+    font-weight: bold; /* Bold for emphasis */
+    color: red; /* Blue color for visibility */
+    transition: color 0.3s, transform 0.3s; /* Smooth transition effects */
+}
+
+#xp-value:hover, #level-value:hover {
+    color: red; /* Darker blue on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
 }
