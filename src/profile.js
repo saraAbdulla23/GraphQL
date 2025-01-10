@@ -13,13 +13,6 @@ const GRAPHQL_API = "https://learn.reboot01.com/api/graphql-engine/v1/graphql";
                     auditRatio
                     totalUp
                     totalDown
-                    timeline: transactions(
-                        where: {type: {_eq: "xp"}, _or: [{attrs: {_eq: {}}}, {attrs: {_has_key: "group"}}], _and: [{path: {_nlike: "%/piscine-js/%"}}, {path: {_nlike: "%/piscine-go/%"}}]}
-                    ) {
-                        amount
-                        createdAt
-                        path
-                    }
                 }
             }`;
 
@@ -34,6 +27,79 @@ const GRAPHQL_API = "https://learn.reboot01.com/api/graphql-engine/v1/graphql";
             const data = await response.json();
             return data.data.user[0];
         }
+        async function retrieveXP() {
+            const xpQuery = `query {
+                transaction_aggregate(
+                    where: {
+                        event: { path: { _eq: "/bahrain/bh-module" } }
+                        type: { _eq: "xp" }
+                    }
+                ) {
+                    aggregate {
+                        sum {
+                            amount
+                        }
+                    }
+                }
+            }`;
+        
+            const response = await fetch(GRAPHQL_API, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ query: xpQuery })
+            });
+        
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`GraphQL error: ${errorText}`);
+            }
+        
+            const xpData = await response.json();
+            return xpData.data.transaction_aggregate.aggregate.sum.amount;
+        }
+
+        async function retrieveUserLevel(username) {
+            try {
+                const levelQuery = `
+                query UserLevel($login: String) {
+                    event_user(
+                        where: {
+                            userLogin: { _eq: $login }
+                            event: { path: { _eq: "/bahrain/bh-module" } }
+                        }
+                    ) {
+                        level
+                    }
+                }`;
+        
+                const requestData = {
+                    query: levelQuery,
+                    variables: { login: username },
+                };
+        
+                const requestHeaders = {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        "Content-Type": "application/json",
+                    },
+                };
+        
+                const response = await fetch(GRAPHQL_API, {
+                    method: 'POST',
+                    headers: requestHeaders.headers,
+                    body: JSON.stringify(requestData),
+                });
+                
+                const levelData = await response.json();
+                return levelData.data.event_user[0].level;
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        
 
         async function renderUserProfile() {
     const user = await fetchUserDetails();
@@ -41,6 +107,7 @@ const GRAPHQL_API = "https://learn.reboot01.com/api/graphql-engine/v1/graphql";
     document.getElementById("fullName").innerText = `Welcome ${user.firstName} ${user.lastName}`;
     document.getElementById("email").innerText = `Email: ${user.email}`;
     document.getElementById("campus").innerText = `Campus: ${user.campus}`;
+    document.getElementById("user-id-value").innerText = user.id; // Set User ID value
 
     // Update the ratio values
     document.getElementById("totalUpValue").innerText = user.totalUp; // Set Done Audits value
@@ -48,8 +115,14 @@ const GRAPHQL_API = "https://learn.reboot01.com/api/graphql-engine/v1/graphql";
 
     renderAuditRatioGraph(user.totalUp, user.totalDown);
     fetchAuditsGiven(user.id); // Fetch audits for pie chart
-}
 
+    // Fetch and display the XP data
+    const xp = await retrieveXP();
+    document.getElementById("xp-value").innerText = xp;
+    // Fetch and display the user level
+    const level = await retrieveUserLevel(user.login);
+    document.getElementById("level-value").innerText = level; // Update the level value directly
+}
 
         function renderAuditRatioGraph(totalUp, totalDown) {
             const total = totalUp + totalDown;
