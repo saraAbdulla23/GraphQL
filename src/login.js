@@ -30,12 +30,21 @@ document.addEventListener("DOMContentLoaded", () => {
         storeToken(responseData);
         window.location.href = "profile.html"; // Redirect to profile page
       } else {
-        loginError.textContent = "Invalid username or password.";
+        // Handle specific HTTP errors
+        if (response.status === 404) {
+          loginError.textContent = "The login endpoint is not found. Please try again later.";
+        } else if (response.status === 401) {
+          loginError.textContent = "Invalid username or password.";
+        } else {
+          loginError.textContent = "Something went wrong. Please try again later.";
+        }
       }
     } catch (error) {
+      // Handle connection errors
       loginError.textContent = "Connection error, please try again later.";
     }
   }
+  
   
   // Function to store the token in local storage
   function storeToken(token) {
