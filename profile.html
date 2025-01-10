@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="styling/profile.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="src/profile.js"></script>
-    
 </head>
 <body>
     <div id="userProfile">
@@ -16,9 +15,13 @@
         <div class="email-campus-container">
             <p class="email-campus" id="email"></p>
             <p class="email-campus" id="campus"></p>
+            <p class="email-campus" id="userId">User ID: <span id="user-id-value">Loading...</span></p>
         </div>
-        <p id="level"></p>
-        <p id="xp"></p>
+        <div id="xp-section">
+            <h3>Total XP: <span id="xp-value">Loading...</span></h3>
+            <h3>User Level: <span id="level-value">Loading...</span></h3>
+        </div>
+        
         <h3 class="ratio-label">Audits Ratio</h3>
         <div style="display: flex; align-items: center;">
             <div id="auditRatioContainer"></div>
